@@ -4,85 +4,96 @@
 //
 //  Created by Mac-LAB on 9/8/26.
 //
-
 import SwiftUI
  
-struct EditProfileView: View {
-    @EnvironmentObject var authController: AuthController
-    @Environment(\.dismiss) private var dismiss
- 
-    @State private var name = ""
-    @State private var email = ""
-    @State private var username = ""
+struct MyCatsView: View {
+    @EnvironmentObject var catController: CatController
  
     var body: some View {
-        ZStack {
-            Theme.background.ignoresSafeArea()
+        NavigationStack {
+            ZStack(alignment: .bottomTrailing) {
+                Theme.background.ignoresSafeArea()
  
-            VStack(spacing: 20) {
-                ZStack(alignment: .bottomTrailing) {
-                    Image(systemName: "person.crop.circle.fill")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 130, height: 130)
-                        .foregroundStyle(.gray.opacity(0.6))
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 20) {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("My Cats").font(.largeTitle.bold())
+                            Text("Manage pet logs, metrics & diets")
+                                .foregroundStyle(.secondary)
+                        }
+ 
+                        VStack(spacing: 16) {
+                            ForEach(catController.cats) { cat in
+                                NavigationLink {
+                                    CatDetailsView(cat: cat)
+                                } label: {
+                                    catCard(cat)
+                                }
+                                .buttonStyle(.plain)
+                            }
+                        }
+                    }
+                    .padding(24)
+                    .padding(.bottom, 80)
+                }
+ 
+                NavigationLink {
+                    AddCatView()
+                } label: {
+                    Image(systemName: "plus")
+                        .font(.title2.bold())
+                        .foregroundStyle(.black)
+                        .frame(width: 56, height: 56)
+                        .background(Theme.accentYellow)
                         .clipShape(Circle())
+                        .shadow(radius: 4)
+                }
+                .padding(24)
+            }
+            .navigationBarHidden(true)
+        }
+    }
  
-                    Button {
-                        // photo picker action
-                    } label: {
-                        // NOTE: original code used "Camera.fill" (capital C), which is not a
-                        // valid SF Symbol name and would silently fail to render.
-                        Image(systemName: "camera.fill")
-                            .foregroundStyle(.black)
-                            .padding(10)
-                            .background(Theme.accentYellow)
-                            .clipShape(Circle())
+    private func catCard(_ cat: Cat) -> some View {
+        HStack(alignment: .top, spacing: 14) {
+            Image(systemName: "cat.fill")
+                .font(.system(size: 30))
+                .foregroundStyle(.black.opacity(0.6))
+                .frame(width: 64, height: 64)
+                .background(Color.gray.opacity(0.15))
+                .clipShape(RoundedRectangle(cornerRadius: 14))
+ 
+            VStack(alignment: .leading, spacing: 4) {
+                Text(cat.name).font(.title3.bold())
+                Text(cat.breed).foregroundStyle(.secondary)
+                HStack(spacing: 12) {
+                    Label(cat.age, systemImage: "clock")
+                    if !cat.colorPattern.isEmpty {
+                        Label(cat.colorPattern, systemImage: "pawprint")
                     }
                 }
-                .frame(maxWidth: .infinity)
- 
-                VStack(alignment: .leading, spacing: 16) {
-                    Text("Name")
-                    TextField("Name", text: $name).roundedField()
- 
-                    Text("Email Address")
-                    TextField("Email", text: $email).roundedField()
- 
-                    Text("Username")
-                    TextField("Username", text: $username).roundedField()
-                }
- 
-                Button(action: {
-                    authController.user.fullName = name
-                    authController.user.email = email
-                    authController.user.username = username
-                    dismiss()
-                }) {
-                    Text("Save Changes")
-                        .font(.headline)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 12)
-                }
-                .buttonStyle(.borderedProminent)
-                .tint(Theme.accentYellow)
-                .foregroundStyle(.black)
-                .clipShape(RoundedRectangle(cornerRadius: 14))
+                .font(.caption)
+                .foregroundStyle(.secondary)
             }
-            .padding(24)
+ 
+            Spacer()
+ 
+            Text(cat.gender)
+                .font(.caption.weight(.semibold))
+                .padding(.horizontal, 10)
+                .padding(.vertical, 4)
+                .background(cat.gender == "Female" ? Theme.accentPurple.opacity(0.15) : Color.blue.opacity(0.15))
+                .foregroundStyle(cat.gender == "Female" ? Theme.accentPurple : .blue)
+                .clipShape(Capsule())
         }
-        .navigationTitle("Edit Profile")
-        .navigationBarTitleDisplayMode(.inline)
-        .onAppear {
-            name = authController.user.fullName
-            email = authController.user.email
-            username = authController.user.username
-        }
+        .padding()
+        .background(Theme.cardBackground)
+        .clipShape(RoundedRectangle(cornerRadius: 18))
     }
 }
  
 #Preview {
-    EditProfileView()
+    MyCatsView()
         .environmentObject(AuthController())
         .environmentObject(CatController())
         .environmentObject(ReminderController())
