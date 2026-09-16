@@ -6,94 +6,94 @@
 //
 
 import SwiftUI
-
+ 
 struct LoginView: View {
     @EnvironmentObject var authController: AuthController
     @State private var username = ""
     @State private var password = ""
     @State private var showError = false
-
+ 
     var body: some View {
-        ZStack {
-            Color(red: 255/255, green: 244/255, blue: 212/255)
-                .ignoresSafeArea()
-
-            NavigationStack {
+        NavigationStack {
+            ZStack {
+                Theme.background.ignoresSafeArea()
+ 
                 VStack(spacing: 20) {
                     Spacer()
-                    
-                    Image("Cat:|")
-                        .resizable()
-                        .scaledToFill()
+ 
+                    // NOTE: the original code referenced an image named "Cat:|", which is not
+                    // a valid asset name and would never load. Swap this for your real asset
+                    // (e.g. Image("CatLogo")) once it's in Assets.xcassets.
+                    Image(systemName: "cat.fill")
+                        .font(.system(size: 60))
+                        .foregroundStyle(.white)
                         .frame(width: 150, height: 150)
+                        .background(Theme.accentYellow.opacity(0.7))
                         .clipShape(Circle())
                         .overlay(
-                            Circle()
-                                .stroke(Color(red: 255/255, green: 199/255, blue: 44/255), lineWidth: 4)
+                            Circle().stroke(Theme.accentYellow, lineWidth: 4)
                         )
-
+ 
                     Text("CatLink")
                         .font(.largeTitle.bold())
-
+ 
                     Text("Local Life and Animal Management")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
-
+ 
+                    Spacer()
+ 
                     VStack(spacing: 14) {
                         TextField("Username or Email", text: $username)
-                            .textFieldStyle(.roundedBorder)
                             .textInputAutocapitalization(.never)
-
+                            .roundedField()
+ 
                         SecureField("Password", text: $password)
-                            .textFieldStyle(.roundedBorder)
-
+                            .roundedField()
+ 
                         Button("Forgot Password?") { }
                             .font(.footnote)
                             .frame(maxWidth: .infinity, alignment: .trailing)
-                            .tint(Color(red: 115/255, green: 86/255,  blue: 241/255))
-                        
-                        
-                        Spacer()
-
-                        Button(action: {
-                            authController.login(username: username, password: password)
-                            showError = !authController.isLoggedIn
-                        }) {
-                            Text("Login")
-                                .font(.headline)
-                                .frame(maxWidth: .infinity)
-                                .padding(.vertical, 12)
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .tint(Color(red: 255/255, green: 199/255, blue: 44/255))
-                        .foregroundStyle(.black)
-                        
+                            .tint(Theme.accentPurple)
                     }
-
+ 
                     if showError {
                         Text("Invalid username/email or password.")
                             .foregroundStyle(.red)
                             .font(.footnote)
                     }
-                    
-                    HStack{
-                        
+ 
+                    Button(action: {
+                        authController.login(username: username, password: password)
+                        showError = !authController.isLoggedIn
+                    }) {
+                        Text("Login")
+                            .font(.headline)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 12)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(Theme.accentYellow)
+                    .foregroundStyle(.black)
+                    .clipShape(RoundedRectangle(cornerRadius: 14))
+ 
+                    HStack {
                         Text("Don't have an account?")
-                        
                         NavigationLink("Register") {
                             RegistrationView()
                         }
-                        .tint(Color(red: 115/255, green: 86/255,  blue: 241/255))
-
+                        .tint(Theme.accentPurple)
                     }
+                    .font(.footnote)
+ 
                     Spacer()
                 }
                 .padding(24)
-                .background(Color(red: 255/255, green: 244/255, blue: 212/255))
             }
         }
     }
 }
+ 
 #Preview {
     LoginView()
         .environmentObject(AuthController())
