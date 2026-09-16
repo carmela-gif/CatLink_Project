@@ -6,135 +6,137 @@
 //
 
 import SwiftUI
-
+ 
 struct DashboardView: View {
     @EnvironmentObject var authController: AuthController
-
+    @EnvironmentObject var catController: CatController
+    @EnvironmentObject var reminderController: ReminderController
+ 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                ZStack{
-                    
-                    Color(red: 255/255, green: 244/255, blue: 212/255)
-                        .ignoresSafeArea()
-                    
+            ZStack {
+                Theme.background.ignoresSafeArea()
+ 
+                ScrollView {
                     VStack(alignment: .leading, spacing: 20) {
-                        
-                        Text("Good Morning, \(authController.user.fullName.components(separatedBy: " ").first ?? "Annie")")
-                            .font(.title2.bold())
-                        
-                        ZStack{
-                            HStack{
-                                Image("profile")
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 50, height: 70)
-                                    .clipShape(Rectangle())
-                                
-                                VStack{
-                                    Text("Your Cat Family")
-                                        .font(.headline)
-                                    HStack {
-                                        
-                                        CatMiniCard(name: "Luna")
-                                        CatMiniCard(name: "Mochi")
-                                    }
-
-                                }
-                                
-                                Spacer()
-                            }
-                            
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Dashboard")
+                                .font(.title3.weight(.semibold))
+                                .foregroundStyle(.secondary)
+                            Text("Good Morning, \(authController.user.fullName.components(separatedBy: " ").first ?? "there") 👋")
+                                .font(.title.bold())
+                            Text("\(catController.cats.map(\.name).joined(separator: " & ")) are doing great today!")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
                         }
-                        
-                        .frame(maxWidth: .infinity)
+ 
+                        HStack(spacing: 14) {
+                            Image(systemName: "pawprint.circle.fill")
+                                .font(.system(size: 40))
+                                .foregroundStyle(Theme.accentPurple)
+ 
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Your Cat Family").font(.headline)
+                                Text(catController.cats.map { "\($0.name) (\($0.age))" }.joined(separator: " • "))
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+ 
+                            Spacer()
+ 
+                            Text("\(catController.cats.count) Cats")
+                                .font(.caption.weight(.semibold))
+                                .padding(.horizontal, 10)
+                                .padding(.vertical, 4)
+                                .background(Theme.accentYellow.opacity(0.3))
+                                .clipShape(Capsule())
+                        }
                         .padding()
-                        .background(Color.white.opacity(0.8))
+                        .background(Theme.cardBackground)
                         .clipShape(RoundedRectangle(cornerRadius: 16))
-                        
-                        Text("Quick Actions")
-                            .font(.headline)
-                        
+ 
+                        Text("Quick Actions").font(.headline)
+ 
                         NavigationLink {
                             MyCatsView()
                         } label: {
-                            ActionCard(title: "My Cats", subtitle: "2 Cats", icon: "cat.fill")
+                            ActionCard(title: "My Cats", subtitle: "\(catController.cats.count) Cats",
+                                       icon: "cat.fill", tint: Theme.accentYellow.opacity(0.35))
                         }
-                        
-                            .background(Color.white.opacity(0.8))
-                            .clipShape(RoundedRectangle(cornerRadius: 16))
-                        
+ 
                         NavigationLink {
                             AddReportView()
                         } label: {
-                            ActionCard(title: "Report Stray Cat", subtitle: "Help a stray", icon: "mappin.and.ellipse")
+                            ActionCard(title: "Report Stray Cat", subtitle: "Help a stray",
+                                       icon: "mappin.and.ellipse", tint: Theme.accentPurple.opacity(0.15))
                         }
-                            .background(Color.red.opacity(0.2))
-                            .clipShape(RoundedRectangle(cornerRadius: 16))
-                        
-                        HStack{
-                            
-                            Text("Upcoming Reminders")
-                                .font(.headline)
-                            
+ 
+                        HStack {
+                            Text("Upcoming Reminders").font(.headline)
                             Spacer()
-                            
                             NavigationLink("See All") {
                                 RemindersView()
                             }
-                                .tint(Color(red: 115/255, green: 86/255,  blue: 241/255))
+                            .tint(Theme.accentPurple)
+                            .font(.subheadline)
                         }
-                        
-                        Text("Feed Luna • Today, 6:00 PM")
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.white.opacity(0.8))
-                            .clipShape(RoundedRectangle(cornerRadius: 16))
-                        Text("Vet Appointment • Sep 15, 10:00 AM")                   .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.white.opacity(0.8))
-                            .clipShape(RoundedRectangle(cornerRadius: 16))
+ 
+                        VStack(spacing: 12) {
+                            ForEach(reminderController.upcoming.prefix(3)) { reminder in
+                                HStack {
+                                    RoundedRectangle(cornerRadius: 2)
+                                        .fill(reminder.tag.color)
+                                        .frame(width: 4, height: 36)
+                                    VStack(alignment: .leading, spacing: 2) {
+                                        Text(reminder.title).font(.subheadline.weight(.semibold))
+                                        Text(reminder.description).font(.caption).foregroundStyle(.secondary)
+                                    }
+                                    Spacer()
+                                    Text(reminder.date).font(.caption).foregroundStyle(.secondary)
+                                }
+                                .padding()
+                                .background(Theme.cardBackground)
+                                .clipShape(RoundedRectangle(cornerRadius: 14))
+                            }
+                        }
                     }
-                    .padding()
+                    .padding(24)
                     .foregroundStyle(.black)
                 }
             }
+            .navigationBarHidden(true)
         }
     }
 }
-
-struct CatMiniCard: View {
-    let name: String
-
-    var body: some View {
-        VStack {
-            
-            Text(name)
-                .font(.headline)
-        }
-    }
-}
-
+ 
 struct ActionCard: View {
     let title: String
     let subtitle: String
     let icon: String
-
+    var tint: Color = Theme.accentYellow
+ 
     var body: some View {
         HStack {
-            
             Image(systemName: icon)
                 .font(.title2)
+                .frame(width: 44, height: 44)
+                .background(Color.white)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+ 
             VStack(alignment: .leading) {
                 Text(title).font(.headline)
                 Text(subtitle).font(.subheadline).foregroundStyle(.secondary)
             }
             Spacer()
-            Image(systemName: "chevron.right")
-        }        .padding()
+            Image(systemName: "chevron.right").foregroundStyle(.secondary)
+        }
+        .padding()
+        .background(tint)
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .foregroundStyle(.black)
     }
 }
-
+ 
 #Preview {
     DashboardView()
         .environmentObject(AuthController())
