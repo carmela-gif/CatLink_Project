@@ -1,9 +1,10 @@
 //
-//  My.swift
+//  MyCatsView.swift
 //  CatLink_Project
 //
 //  Created by Mac-LAB on 9/8/26.
 //
+
 import SwiftUI
  
 struct MyCatsView: View {
