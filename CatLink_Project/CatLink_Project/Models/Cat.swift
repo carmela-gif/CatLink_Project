@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+ 
 struct Cat: Identifiable {
     let id = UUID()
     var name: String
@@ -15,4 +15,10 @@ struct Cat: Identifiable {
     var weight: String
     var gender: String
     var healthInformation: String
+    var colorPattern: String = ""
+ 
+    var displayID: String {
+        "CAT-\(id.uuidString.prefix(4))"
+    }
 }
+ 
