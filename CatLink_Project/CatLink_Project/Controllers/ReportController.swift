@@ -7,7 +7,7 @@
 
 import Foundation
 internal import Combine
-
+ 
 @MainActor
 final class ReportController: ObservableObject {
     @Published var reports: [StrayReport] = [
@@ -20,7 +20,7 @@ final class ReportController: ObservableObject {
             status: "Needs Assistance"
         )
     ]
-
+ 
     func addReport(_ report: StrayReport) {
         reports.append(report)
     }
