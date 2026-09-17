@@ -25,6 +25,7 @@ struct MainTabView: View {
         .tint(Theme.accentYellow)
     }
 }
+
 #Preview {
     MainTabView()
         .environmentObject(AuthController())

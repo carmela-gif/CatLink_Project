@@ -1,0 +1,158 @@
+//
+//  ReportDetailsView.swift
+//  CatLink_Project
+//
+//  Created by Mac-LAB on 9/18/26.
+//
+/*
+import SwiftUI
+
+struct ReportDetailsView: View {
+    @Environment(\.dismiss) private var dismiss
+
+    let report: StrayReport
+
+    private let accentYellow = Color(red: 255/255, green: 199/255, blue: 44/255)
+    private let backgroundCream = Color(red: 255/255, green: 244/255, blue: 212/255)
+
+    var body: some View {
+        ZStack {
+            backgroundCream.ignoresSafeArea()
+
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+
+                    // Photo
+                    Image(report.imageName)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(height: 220)
+                        .frame(maxWidth: .infinity)
+                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                        .padding(.horizontal)
+
+                    HStack {
+                        Text("Current Status")
+                            .font(.headline)
+                        Spacer()
+                        StatusBadge(text: report.status, color: accentYellow)
+                    }
+                    .padding(.horizontal)
+
+                    VStack(spacing: 12) {
+                        InfoCard(label: "Description", value: report.description)
+                        InfoCard(label: "Location", value: report.location)
+                        InfoCard(label: "Date Reported", value: report.dateReported)
+                        InfoCard(label: "Condition", value: report.condition)
+                        InfoCard(label: "Reporter", value: report.reporter)
+                    }
+                    .padding(.horizontal)
+                    Text("Status Timeline")
+                        .font(.headline)
+                        .padding(.horizontal)
+
+                    TimelineCard(steps: report.timeline, accent: accentYellow)
+                        .padding(.horizontal)
+                        .padding(.bottom, 20)
+                }
+                .padding(.top, 8)
+            }
+        }
+        .navigationTitle("Report Details")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                    dismiss()
+                } label: {
+                    Image(systemName: "chevron.left")
+                        .foregroundStyle(.black)
+                }
+            }
+        }
+    }
+}
+
+private struct StatusBadge: View {
+    let text: String
+    let color: Color
+
+    var body: some View {
+        Text(text)
+            .font(.subheadline.weight(.semibold))
+            .foregroundStyle(.black)
+            .padding(.horizontal, 14)
+            .padding(.vertical, 6)
+            .background(color)
+            .clipShape(Capsule())
+    }
+}
+
+private struct InfoCard: View {
+    let label: String
+    let value: String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(label)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            Text(value)
+                .font(.body.weight(.semibold))
+                .foregroundStyle(.black)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding()
+        .background(Color.white)
+        .clipShape(RoundedRectangle(cornerRadius: 14))
+    }
+}
+
+struct TimelineStep: Identifiable {
+    let id = UUID()
+    let title: String
+    let subtitle: String
+    let isCompleted: Bool
+    let isCurrent: Bool
+}
+
+private struct TimelineCard: View {
+    let steps: [TimelineStep]
+    let accent: Color
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            ForEach(Array(steps.enumerated()), id: \.element.id) { index, step in
+                HStack(alignment: .top, spacing: 14) {
+                    VStack(spacing: 0) {
+                        Circle()
+                            .fill(step.isCurrent ? accent : (step.isCompleted ? .black : Color.gray.opacity(0.3)))
+                            .frame(width: step.isCurrent ? 14 : 10, height: step.isCurrent ? 14 : 10)
+                        if index < steps.count - 1 {
+                            Rectangle()
+                                .fill(Color.gray.opacity(0.25))
+                                .frame(width: 2)
+                                .frame(minHeight: 36)
+                        }
+                    }
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(step.title)
+                            .font(.subheadline.weight(step.isCurrent ? .bold : .semibold))
+                            .foregroundStyle(step.isCurrent || step.isCompleted ? .black : .secondary)
+                        Text(step.subtitle)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding(.bottom, index < steps.count - 1 ? 16 : 0)
+
+                    Spacer()
+                }
+            }
+        }
+        .padding()
+        .background(Color.white)
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+    }
+}
+*/
