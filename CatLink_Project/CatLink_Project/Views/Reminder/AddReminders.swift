@@ -60,11 +60,9 @@ struct AddReminderView: View {
                     Group {
                         Text("Category").font(.subheadline).fontWeight(.semibold)
                         HStack(spacing: 10) {
-                            categoryButton(.feeding, label: "Feeding")
-                            categoryButton(.medication, label: "Medication")
-                            categoryButton(.vet, label: "Vet")
-                            categoryButton(.grooming, label: "Grooming")
+                            TextField("e.g. Feeding", text: $date)
                         }
+                        .roundedField()
                     }
  
                     Button(action: {

@@ -17,6 +17,23 @@ struct CatDetailsView: View {
             Theme.background.ignoresSafeArea()
  
             ScrollView {
+                
+                HStack{
+                    Button {
+                    } label: {
+                        Image(systemName: "chevron.left")
+                            .frame(width: 36, height: 36)
+                            .background(Color.white)
+                            .clipShape(Circle())
+                            .foregroundStyle(.black)
+                    }
+                    Text("Cat Details")
+                        .font(.title2.bold())
+                        .padding()
+                    
+                    Spacer()
+                }
+                
                 VStack(spacing: 20) {
                     Image(systemName: "cat.fill")
                         .font(.system(size: 50))

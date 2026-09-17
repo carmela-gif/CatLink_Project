@@ -24,6 +24,7 @@ struct AddCatView: View {
             Theme.background.ignoresSafeArea()
  
             ScrollView {
+                
                 VStack(alignment: .leading, spacing: 18) {
                     Group {
                         Text("Cat Name").font(.subheadline).fontWeight(.semibold)
@@ -55,11 +56,6 @@ struct AddCatView: View {
                         .padding(4)
                         .background(Color.white.opacity(0.6))
                         .clipShape(Capsule())
-                    }
- 
-                    Group {
-                        Text("Color / Pattern").font(.subheadline).fontWeight(.semibold)
-                        TextField("Lilac-Cream", text: $colorPattern).roundedField()
                     }
  
                     Group {

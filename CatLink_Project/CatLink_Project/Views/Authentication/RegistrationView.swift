@@ -72,9 +72,14 @@ struct RegistrationView: View {
                                             .foregroundStyle(.black)
                                     }
                                 }
-                            Text("I agree to the Terms of Service & Privacy Policy")
-                                .font(.footnote)
-                                .foregroundStyle(.secondary)
+                            HStack{
+                                Text("I agree to the")
+                                    .font(.footnote)
+                                    .foregroundStyle(.secondary)
+                                Link("Terms of Service & Privacy Policy", destination: URL(string: "https://google.com")!)
+                                    .font(.footnote)
+                                    .tint(Theme.accentPurple)
+                            }
                         }
                     }
                     .buttonStyle(.plain)

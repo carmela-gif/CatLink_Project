@@ -25,6 +25,7 @@ struct EditProfileView: View {
  
             VStack(spacing: 20) {
                 ZStack(alignment: .bottomTrailing) {
+                    
                     Group {
                         if let selectedImageData, let uiImage = UIImage(data: selectedImageData) {
                             Image(uiImage: uiImage)

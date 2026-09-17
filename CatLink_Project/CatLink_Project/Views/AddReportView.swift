@@ -33,6 +33,7 @@ struct AddReportView: View {
                                 .frame(width: 36, height: 36)
                                 .background(Color.white)
                                 .clipShape(Circle())
+                                .foregroundStyle(.black)
                         }
                         Text("Report Stray Cat")
                             .font(.title2.bold())
