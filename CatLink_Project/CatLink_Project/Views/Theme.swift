@@ -2,7 +2,7 @@
 //  Theme.swift
 //  CatLink_Project
 //
-//  Shared colors and styles so every screen matches the Figma design.
+//  Created by Mac-LAB on 9/15/26.
 //
 
 import SwiftUI
