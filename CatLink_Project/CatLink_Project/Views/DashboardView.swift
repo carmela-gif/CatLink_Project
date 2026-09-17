@@ -22,7 +22,7 @@ struct DashboardView: View {
                         VStack(alignment: .leading, spacing: 4) {
                             Text("Dashboard")
                                 .font(.title3.weight(.bold))
-                            Text("Good Morning, \(authController.user.fullName.components(separatedBy: " ").first ?? "there") ")
+                            Text("Good Day, \(authController.user.fullName.components(separatedBy: " ").first ?? "there") ")
                                 .font(.title.bold())
                             Text("\(catController.cats.map(\.name).joined(separator: " & ")) are doing great today!")
                                 .font(.subheadline)
@@ -116,17 +116,15 @@ struct ActionCard: View {
  
     var body: some View {
         HStack {
-            VStack{
+            VStack(alignment: .leading, spacing: 8) {
                 Image(systemName: icon)
                     .font(.title2)
                     .frame(width: 44, height: 44)
                     .background(Color.white)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
      
-                VStack(alignment: .leading) {
-                    Text(title).font(.headline)
-                    Text(subtitle).font(.subheadline).foregroundStyle(.secondary)
-                }
+                Text(title).font(.headline)
+                Text(subtitle).font(.subheadline).foregroundStyle(.secondary)
             }
             Spacer()
             Image(systemName: "chevron.right").foregroundStyle(.secondary)
@@ -137,7 +135,7 @@ struct ActionCard: View {
         .foregroundStyle(.black)
     }
 }
- 
+
 #Preview {
     DashboardView()
         .environmentObject(AuthController())
