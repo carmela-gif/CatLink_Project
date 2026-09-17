@@ -21,9 +21,6 @@ struct LoginView: View {
                 VStack(spacing: 20) {
                     Spacer()
  
-                    // NOTE: the original code referenced an image named "Cat:|", which is not
-                    // a valid asset name and would never load. Swap this for your real asset
-                    // (e.g. Image("CatLogo")) once it's in Assets.xcassets.
                     Image(systemName: "cat.fill")
                         .font(.system(size: 60))
                         .foregroundStyle(.white)

@@ -14,8 +14,6 @@ enum Theme {
     static let cardBackground = Color.white.opacity(0.9)
 }
 
-/// White rounded text-field background used throughout the Figma (Login, Registration,
-/// Add Cat, Add Report, Add Reminder, Edit Profile) instead of the default Form styling.
 struct RoundedField: ViewModifier {
     func body(content: Content) -> some View {
         content

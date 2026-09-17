@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import PhotosUI
  
 struct EditProfileView: View {
     @EnvironmentObject var authController: AuthController
@@ -15,24 +16,34 @@ struct EditProfileView: View {
     @State private var email = ""
     @State private var username = ""
  
+    @State private var selectedPhoto: PhotosPickerItem?
+    @State private var selectedImageData: Data?
+ 
     var body: some View {
         ZStack {
             Theme.background.ignoresSafeArea()
  
             VStack(spacing: 20) {
                 ZStack(alignment: .bottomTrailing) {
-                    Image(systemName: "person.crop.circle.fill")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 130, height: 130)
-                        .foregroundStyle(.gray.opacity(0.6))
-                        .clipShape(Circle())
+                    Group {
+                        if let selectedImageData, let uiImage = UIImage(data: selectedImageData) {
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                .scaledToFill()
+                        } else {
+                            Image(systemName: "person.crop.circle.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .foregroundStyle(.gray.opacity(0.6))
+                        }
+                    }
+                    .frame(width: 130, height: 130)
+                    .clipShape(Circle())
+                    .overlay(
+                        Circle().stroke(Theme.accentYellow, lineWidth: 5)
+                    )
  
-                    Button {
-                        // photo picker action
-                    } label: {
-                        // NOTE: original code used "Camera.fill" (capital C), which is not a
-                        // valid SF Symbol name and would silently fail to render.
+                    PhotosPicker(selection: $selectedPhoto, matching: .images) {
                         Image(systemName: "camera.fill")
                             .foregroundStyle(.black)
                             .padding(10)
@@ -41,6 +52,13 @@ struct EditProfileView: View {
                     }
                 }
                 .frame(maxWidth: .infinity)
+                .onChange(of: selectedPhoto) {
+                    Task {
+                        if let data = try? await selectedPhoto?.loadTransferable(type: Data.self) {
+                            selectedImageData = data
+                        }
+                    }
+                }
  
                 VStack(alignment: .leading, spacing: 16) {
                     Text("Name")
