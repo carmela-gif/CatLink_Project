@@ -39,9 +39,12 @@ struct EditProfileView: View {
                     }
                     .frame(width: 130, height: 130)
                     .clipShape(Circle())
+<<<<<<< HEAD
                     .overlay(
                         Circle().stroke(Theme.accentYellow, lineWidth: 5)
                     )
+=======
+>>>>>>> d64a40ed7d7e7b4242ce6321fd2ac99684c890ca
  
                     PhotosPicker(selection: $selectedPhoto, matching: .images) {
                         Image(systemName: "camera.fill")
