@@ -4,54 +4,51 @@
 //
 //  Created by Mac-LAB on 9/18/26.
 //
-/*
+ 
 import SwiftUI
-
+ 
 struct ReportDetailsView: View {
     @Environment(\.dismiss) private var dismiss
-
+ 
     let report: StrayReport
-
-    private let accentYellow = Color(red: 255/255, green: 199/255, blue: 44/255)
-    private let backgroundCream = Color(red: 255/255, green: 244/255, blue: 212/255)
-
+ 
     var body: some View {
         ZStack {
-            backgroundCream.ignoresSafeArea()
-
+            Theme.background.ignoresSafeArea()
+ 
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-
-                    // Photo
-                    Image(report.imageName)
+ 
+                    Image(systemName: "photo.fill")
                         .resizable()
-                        .scaledToFill()
+                        .scaledToFit()
                         .frame(height: 220)
                         .frame(maxWidth: .infinity)
+                        .background(Color.gray.opacity(0.2))
                         .clipShape(RoundedRectangle(cornerRadius: 20))
                         .padding(.horizontal)
-
+ 
                     HStack {
                         Text("Current Status")
                             .font(.headline)
                         Spacer()
-                        StatusBadge(text: report.status, color: accentYellow)
+                        StatusBadge(text: report.status, color: Theme.accentYellow)
                     }
                     .padding(.horizontal)
-
+ 
                     VStack(spacing: 12) {
                         InfoCard(label: "Description", value: report.description)
                         InfoCard(label: "Location", value: report.location)
-                        InfoCard(label: "Date Reported", value: report.dateReported)
+                        InfoCard(label: "Date Reported", value: report.date)
                         InfoCard(label: "Condition", value: report.condition)
-                        InfoCard(label: "Reporter", value: report.reporter)
                     }
                     .padding(.horizontal)
+ 
                     Text("Status Timeline")
                         .font(.headline)
                         .padding(.horizontal)
-
-                    TimelineCard(steps: report.timeline, accent: accentYellow)
+ 
+                    TimelineCard(steps: report.timeline, accent: Theme.accentYellow)
                         .padding(.horizontal)
                         .padding(.bottom, 20)
                 }
@@ -62,21 +59,50 @@ struct ReportDetailsView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                Button {
-                    dismiss()
-                } label: {
-                    Image(systemName: "chevron.left")
-                        .foregroundStyle(.black)
-                }
             }
         }
     }
 }
+ 
+struct TimelineStep: Identifiable {
+    let id = UUID()
+    let title: String
+    let subtitle: String
+    let isCompleted: Bool
+    let isCurrent: Bool
+}
 
+extension StrayReport {
+    var timeline: [TimelineStep] {
+        let stages = ["Needs Assistance", "Under Observation", "Rescued", "Adopted", "Resolved"]
+        let currentIndex = stages.firstIndex(of: status) ?? 0
+ 
+        return stages.enumerated().map { index, stage in
+            let subtitle: String
+            if index == currentIndex {
+                subtitle = "Reported Today"
+            } else if index == currentIndex + 1 {
+                subtitle = "Pending dispatch"
+            } else if index < currentIndex {
+                subtitle = "Completed"
+            } else {
+                subtitle = "Upcoming"
+            }
+ 
+            return TimelineStep(
+                title: stage,
+                subtitle: subtitle,
+                isCompleted: index < currentIndex,
+                isCurrent: index == currentIndex
+            )
+        }
+    }
+}
+ 
 private struct StatusBadge: View {
     let text: String
     let color: Color
-
+ 
     var body: some View {
         Text(text)
             .font(.subheadline.weight(.semibold))
@@ -87,11 +113,11 @@ private struct StatusBadge: View {
             .clipShape(Capsule())
     }
 }
-
+ 
 private struct InfoCard: View {
     let label: String
     let value: String
-
+ 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(label)
@@ -107,19 +133,11 @@ private struct InfoCard: View {
         .clipShape(RoundedRectangle(cornerRadius: 14))
     }
 }
-
-struct TimelineStep: Identifiable {
-    let id = UUID()
-    let title: String
-    let subtitle: String
-    let isCompleted: Bool
-    let isCurrent: Bool
-}
-
+ 
 private struct TimelineCard: View {
     let steps: [TimelineStep]
     let accent: Color
-
+ 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ForEach(Array(steps.enumerated()), id: \.element.id) { index, step in
@@ -135,7 +153,7 @@ private struct TimelineCard: View {
                                 .frame(minHeight: 36)
                         }
                     }
-
+ 
                     VStack(alignment: .leading, spacing: 2) {
                         Text(step.title)
                             .font(.subheadline.weight(step.isCurrent ? .bold : .semibold))
@@ -145,7 +163,7 @@ private struct TimelineCard: View {
                             .foregroundStyle(.secondary)
                     }
                     .padding(.bottom, index < steps.count - 1 ? 16 : 0)
-
+ 
                     Spacer()
                 }
             }
@@ -155,4 +173,19 @@ private struct TimelineCard: View {
         .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 }
-*/
+ 
+#Preview {
+    NavigationStack {
+        ReportDetailsView(
+            report: StrayReport(
+                description: "Orange tabby, medium size, friendly",
+                location: "Maple Street Park",
+                date: "September 3, 2026",
+                condition: "Injured — left front paw",
+                additionalInformation: "Found near the playground entrance.",
+                status: "Needs Assistance"
+            )
+        )
+    }
+}
+ 

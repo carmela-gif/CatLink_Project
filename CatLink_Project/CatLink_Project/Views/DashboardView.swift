@@ -11,6 +11,7 @@ struct DashboardView: View {
     @EnvironmentObject var authController: AuthController
     @EnvironmentObject var catController: CatController
     @EnvironmentObject var reminderController: ReminderController
+    @EnvironmentObject var reportController: ReportController
  
     var body: some View {
         NavigationStack {
@@ -69,6 +70,13 @@ struct DashboardView: View {
                             ActionCard(title: "Report Stray Cat", subtitle: "Help a stray",
                                        icon: "mappin.and.ellipse", tint: Theme.accentPurple.opacity(0.15))
                         }
+
+                        NavigationLink {
+                            ReportsView()
+                        } label: {
+                            ActionCard(title: "Reports", subtitle: "\(reportController.reports.count) Reports",
+                                       icon: "list.bullet.clipboard", tint: Theme.accentYellow.opacity(0.2))
+                        }
  
                         HStack {
                             Text("Upcoming Reminders").font(.headline)
@@ -96,6 +104,50 @@ struct DashboardView: View {
                                 .padding()
                                 .background(Theme.cardBackground)
                                 .clipShape(RoundedRectangle(cornerRadius: 14))
+                            }
+                        }
+
+                        if !reportController.reports.isEmpty {
+                            HStack {
+                                Text("Recent Reports").font(.headline)
+                                Spacer()
+                                NavigationLink("See All") {
+                                    ReportsView()
+                                }
+                                .tint(Theme.accentPurple)
+                                .font(.subheadline)
+                            }
+
+                            VStack(spacing: 12) {
+                                ForEach(reportController.reports.prefix(3)) { report in
+                                    NavigationLink {
+                                        ReportDetailsView(report: report)
+                                    } label: {
+                                        HStack {
+                                            VStack(alignment: .leading, spacing: 2) {
+                                                Text(report.description)
+                                                    .font(.subheadline.weight(.semibold))
+                                                    .foregroundStyle(.black)
+                                                    .lineLimit(1)
+                                                Text(report.location)
+                                                    .font(.caption)
+                                                    .foregroundStyle(.secondary)
+                                            }
+                                            Spacer()
+                                            Text(report.status)
+                                                .font(.caption.weight(.semibold))
+                                                .foregroundStyle(.black)
+                                                .padding(.horizontal, 10)
+                                                .padding(.vertical, 4)
+                                                .background(Theme.accentYellow.opacity(0.5))
+                                                .clipShape(Capsule())
+                                        }
+                                        .padding()
+                                        .background(Theme.cardBackground)
+                                        .clipShape(RoundedRectangle(cornerRadius: 14))
+                                    }
+                                    .buttonStyle(.plain)
+                                }
                             }
                         }
                     }
